@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+// Package to create unique id's
+const uniqid = require("uniqid");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -26,3 +28,5 @@ app.get("*", (req, res) =>
 );
 
 app.listen(PORT, () => console.log(`App listening at ${PORT} 🚀`));
+
+console.log(`Unique ID: ${uniqid()}`);
