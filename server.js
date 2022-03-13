@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 // Package to create unique id's
 const uniqid = require("uniqid");
+// Notes database
+const notesData = require("./db/db.json");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -21,6 +23,9 @@ app.get("/", (req, res) =>
 app.get("/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
+
+// Get the notes database
+app.get("/api/notes", (req, res) => res.json(notesData));
 
 // GET Route for 404 page
 app.get("*", (req, res) =>
