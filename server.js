@@ -24,20 +24,15 @@ app.get("/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
-// Read Notes
-const readNotes = (response) => {
+// Get the notes database
+app.get("/api/notes", (req, res) => {
   fs.readFile(databaseFile, "utf8", (err, data) => {
     if (err) {
       console.log(err);
     } else {
-      return response.json(JSON.parse(data));
+      return res.json(JSON.parse(data));
     }
   });
-};
-
-// Get the notes database
-app.get("/api/notes", (req, res) => {
-  readNotes(res);
 });
 
 // Write Notes
@@ -68,35 +63,30 @@ app.post("/api/notes", (req, res) => {
       // Add new note to database
       database = JSON.parse(data);
       database.push(newNote(req));
-      // write notes
+      // Write notes
       writeNotes(res, database);
     }
   });
 });
 
-// // Deleting the notes
-// app.delete("/api/notes/:id", (req, res) => {
-//   fs.readFile("db/db.json", "utf8", (err, data) => {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       const db = JSON.parse(data);
-//       const noteId = req.params.id;
-//       for (let i = 0; i < db.length; i++) {
-//         if (noteId == db[i].id) {
-//           db.splice([i], 1);
-//           fs.writeFile("db/db.json", JSON.stringify(db), (err) => {
-//             if (err) {
-//               console.log(err);
-//             } else {
-//               return res.json(db);
-//             }
-//           });
-//         }
-//       }
-//     }
-//   });
-// });
+// Deleting the notes
+app.delete("/api/notes/:id", (req, res) => {
+  fs.readFile("db/db.json", "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const db = JSON.parse(data);
+      const noteId = req.params.id;
+      // Loop through to find element to delete
+      db.forEach((note, index) => {
+        if (noteId === note.id) {
+          db.splice(index, 1);
+          writeNotes(res, db);
+        }
+      });
+    }
+  });
+});
 
 // GET Route for 404 page
 app.get("*", (req, res) =>
