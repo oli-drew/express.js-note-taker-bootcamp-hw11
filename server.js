@@ -20,12 +20,27 @@ app.get("/", (req, res) =>
 );
 
 // GET Route for notes
-app.get("/notes", (req, res) =>
+app.get("/notes", (res) =>
   res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
+// Read File
+const readNotes = (req, res) => {
+  fs.readFile("db/db.json", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      return res.json(JSON.parse(data));
+    }
+  });
+};
+
 // Get the notes database
-app.get("/api/notes", (req, res) => res.json(notesData));
+app.get("/api/notes", (req, res) => {
+  readNotes(res);
+});
+
+// Save new notes
 
 // GET Route for 404 page
 app.get("*", (req, res) =>
