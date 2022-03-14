@@ -44,7 +44,7 @@ Alternatively, you can use the version hosted on Heroku by navigating to: https:
 
 ### Screenshot
 
-![Animated screenshot of the application](assets/animated-screenshot.gif)
+![Animated screenshot of the application](assets\animated-screenshot.gif)
 
 ## URL
 
